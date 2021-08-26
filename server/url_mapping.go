@@ -6,7 +6,10 @@ import (
 )
 
 func mappings(router *gin.Engine, handlers *dependecies.HandlerContainer) {
-	router.GET("/ping", func(c *gin.Context) {
+	group := router.Group("/api/v1/notes")
+
+	group.GET("/ping", func(c *gin.Context) {
 		c.String(200, "pong")
 	})
+	group.POST("/create", handlers.NoteCreate.Handle)
 }

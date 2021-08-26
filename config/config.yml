@@ -1,0 +1,13 @@
+port: 8000
+
+auth:
+  hash_salt: "hash_salt"
+  signing_key: "signing_key"
+  token_ttl: 86762534720000
+
+mongo:
+  # uri: "mongodb://mongodb:27017"
+  uri: "mongodb://127.0.0.1:27017"
+  name: "go_ml_course"
+  user_collection: "users"
+  notes_collection: "notes"
