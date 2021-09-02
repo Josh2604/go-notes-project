@@ -14,6 +14,7 @@ config
 
 
 ### Enpoints
+
 **Health:**
 GET /api/v1/notes/ping
 
@@ -27,3 +28,39 @@ POST /api/v1/notes/create
   null
 ```
 
+**Update error:**
+POST /api/v1/notes/update/:id
+
+***request:***
+```json
+  {
+      "name": "Name updated"
+  }
+```
+***response:***
+```
+  null
+```
+
+**Get All:**
+GET /api/v1/notes/all
+
+***response:***
+```
+  null
+```
+
+**SignUp:**
+POST /api/v1/notes/signup
+
+***request:***
+```json
+  {
+      "username": "{user_name}",
+      "password": "{password}"
+  }
+```
+***response:***
+```
+  null
+```

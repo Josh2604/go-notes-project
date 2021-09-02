@@ -12,4 +12,7 @@ func mappings(router *gin.Engine, handlers *dependecies.HandlerContainer) {
 		c.String(200, "pong")
 	})
 	group.POST("/create", handlers.NoteCreate.Handle)
+	group.PUT("/update/:id", handlers.NoteUpdate.Handle)
+	group.GET("/all", handlers.NoteGetAll.Handle)
+	group.POST("/signup", handlers.SignUp.Handle)
 }
