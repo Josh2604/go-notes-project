@@ -7,23 +7,34 @@ import (
 	"github.com/Josh2604/go-notes-project/infraestructure/clients/mongodb"
 	"github.com/Josh2604/go-notes-project/infraestructure/entrypoint"
 	"github.com/Josh2604/go-notes-project/infraestructure/entrypoint/handlers"
+	"github.com/Josh2604/go-notes-project/infraestructure/entrypoint/middlewares"
+	"github.com/Josh2604/go-notes-project/utils/zlog"
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
 type HandlerContainer struct {
-	NoteCreate entrypoint.Handler
-	NoteUpdate entrypoint.Handler
-	NoteGetAll entrypoint.Handler
+	NoteCreate gin.HandlerFunc
+	NoteUpdate gin.HandlerFunc
+	NoteGetAll gin.HandlerFunc
 	SignUp     entrypoint.Handler
+	SignIn     entrypoint.Handler
 }
 
 func Start() *HandlerContainer {
 	dbConnection := mongodb.Start()
+	// pgConnection := postgresql.Start()
+
+	logger := zlog.New(true)
 
 	// ---- REPOSITORIES ----
 	user := &mongo.UserRepositoryImplementation{
 		Db: dbConnection.Collection(viper.GetString("mongo.user_collection")),
 	}
+
+	// postgres := &postgres.PostgresImplementation{
+	// 	DB: pgConnection,
+	// }
 
 	notes := mongo.NotesRepositoryImplementation{
 		Db: dbConnection.Collection(viper.GetString("mongo.notes_collection")),
@@ -53,6 +64,10 @@ func Start() *HandlerContainer {
 		Auth: &auth,
 	}
 
+	signIn := &usecases.SignInImplentation{
+		Auth: &auth,
+	}
+
 	// ---- HANDLERS ----
 	handlersApp := HandlerContainer{}
 
@@ -61,18 +76,29 @@ func Start() *HandlerContainer {
 		SignUp: signUp,
 	}
 
+	handlersApp.SignIn = &handlers.AuthSignIn{
+		SignIn: signIn,
+		Logger: logger,
+	}
+
 	// Notes handlers
-	handlersApp.NoteCreate = &handlers.NoteCreate{
-		Note: noteCreate,
-	}
+	handlersApp.NoteCreate = middlewares.NewAuthMiddleware(
+		&handlers.NoteCreate{
+			Note: noteCreate,
+		}, &auth,
+	)
 
-	handlersApp.NoteUpdate = &handlers.NoteUpdate{
-		Note: noteUpdate,
-	}
+	handlersApp.NoteUpdate = middlewares.NewAuthMiddleware(
+		&handlers.NoteUpdate{
+			Note: noteUpdate,
+		}, &auth,
+	)
 
-	handlersApp.NoteGetAll = &handlers.NoteGetAll{
-		Note: noteGetAll,
-	}
+	handlersApp.NoteGetAll = middlewares.NewAuthMiddleware(
+		&handlers.NoteGetAll{
+			Note: noteGetAll,
+		}, &auth,
+	)
 
 	return &handlersApp
 }
