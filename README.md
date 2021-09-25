@@ -23,13 +23,13 @@ GET /api/v1/notes/ping
 ```
 
 **Create note:**
-POST /api/v1/notes/create
+POST /api/v1/notes
 ```
   null
 ```
 
 **Update error:**
-POST /api/v1/notes/update/:id
+PUT /api/v1/notes/:id
 
 ***request:***
 ```json
@@ -44,6 +44,30 @@ POST /api/v1/notes/update/:id
 
 **Get All:**
 GET /api/v1/notes/all
+
+***response:***
+```
+  null
+```
+
+**Get One Note:**
+GET /api/v1/notes/:id
+
+***response:***
+```
+{
+    "ID": "1",
+    "Name": "Test name 1",
+    "Description": "Nota de test 1",
+    "Deleted": true,
+    "DateCreated": "2021-09-25T00:19:30.388258Z",
+    "DateUpdated": "0001-01-01T00:00:00Z",
+    "DateDeleted": "2021-09-25T00:26:03.811343Z"
+}
+```
+
+**Delete Note:**
+DELETE /api/v1/notes/:id
 
 ***response:***
 ```
