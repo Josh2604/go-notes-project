@@ -1,0 +1,8 @@
+FROM postgres:10.17-alpine
+RUN mkdir -p /tmp/psql_data/
+COPY ./dev/notes.sql /docker-entrypoint-initdb.d/
+ENV POSTGRES_HOST=postgres
+ENV POSTGRES_PORT=5432
+ENV POSTGRES_DB=admin
+ENV POSTGRES_USER=sBLRWyyPsInwHftmHAWmYJURGWBGFpLs
+ENV POSTGRES_PASSWORD=tuXL3XSF8O7tsGrcGHoMos4tVNtL3tnrRshSCZokGnIfk4ArDyzaa297k2WgQPSL
