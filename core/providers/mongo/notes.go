@@ -127,9 +127,9 @@ func toMongoNote(n *entities.Note) *NoteModel {
 		Name:        n.Name,
 		Description: n.Description,
 		Deleted:     n.Deleted,
-		CreatedDate: n.DateCreate,
+		CreatedDate: n.DateCreated,
 		UpdatedDate: n.DateUpdated,
-		DeletedDate: n.DeletedDate,
+		DeletedDate: n.DateDeleted,
 	}
 }
 
@@ -139,8 +139,8 @@ func toNoteModel(n *NoteModel) *entities.Note {
 		Name:        n.Name,
 		Description: n.Description,
 		Deleted:     n.Deleted,
-		DateCreate:  n.CreatedDate,
+		DateCreated: n.CreatedDate,
 		DateUpdated: n.UpdatedDate,
-		DeletedDate: n.DeletedDate,
+		DateDeleted: n.DeletedDate,
 	}
 }

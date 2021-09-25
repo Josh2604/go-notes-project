@@ -12,9 +12,9 @@ type Note struct {
 	Name        string
 	Description string
 	Deleted     bool
-	DateCreate  time.Time
+	DateCreated time.Time
 	DateUpdated time.Time
-	DeletedDate time.Time
+	DateDeleted time.Time
 }
 
 type ShortNote struct {
@@ -29,9 +29,9 @@ func NewNoteFromRequest(note requests.NoteRequest) Note {
 		Name:        note.Name,
 		Description: note.Description,
 		Deleted:     false,
-		DateCreate:  time.Now(),
+		DateCreated: time.Now(),
 		DateUpdated: time.Now(),
-		DeletedDate: time.Now(),
+		DateDeleted: time.Now(),
 	}
 }
 

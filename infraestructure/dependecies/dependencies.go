@@ -3,8 +3,10 @@ package dependecies
 import (
 	"github.com/Josh2604/go-notes-project/core/providers/auth"
 	"github.com/Josh2604/go-notes-project/core/providers/mongo"
+	"github.com/Josh2604/go-notes-project/core/providers/postgres"
 	"github.com/Josh2604/go-notes-project/core/usecases"
 	"github.com/Josh2604/go-notes-project/infraestructure/clients/mongodb"
+	"github.com/Josh2604/go-notes-project/infraestructure/clients/postgresql"
 	"github.com/Josh2604/go-notes-project/infraestructure/entrypoint"
 	"github.com/Josh2604/go-notes-project/infraestructure/entrypoint/handlers"
 	"github.com/Josh2604/go-notes-project/infraestructure/entrypoint/middlewares"
@@ -17,13 +19,15 @@ type HandlerContainer struct {
 	NoteCreate gin.HandlerFunc
 	NoteUpdate gin.HandlerFunc
 	NoteGetAll gin.HandlerFunc
+	NoteGet    gin.HandlerFunc
+	NoteDelete gin.HandlerFunc
 	SignUp     entrypoint.Handler
 	SignIn     entrypoint.Handler
 }
 
 func Start() *HandlerContainer {
 	dbConnection := mongodb.Start()
-	// pgConnection := postgresql.Start()
+	pgConnection := postgresql.StartGorm()
 
 	logger := zlog.New(true)
 
@@ -32,13 +36,13 @@ func Start() *HandlerContainer {
 		Db: dbConnection.Collection(viper.GetString("mongo.user_collection")),
 	}
 
-	// postgres := &postgres.PostgresImplementation{
-	// 	DB: pgConnection,
-	// }
-
-	notes := mongo.NotesRepositoryImplementation{
-		Db: dbConnection.Collection(viper.GetString("mongo.notes_collection")),
+	postgres := &postgres.PostgresImplementation{
+		DB: pgConnection,
 	}
+
+	// notes := mongo.NotesRepositoryImplementation{
+	// 	Db: dbConnection.Collection(viper.GetString("mongo.notes_collection")),
+	// }
 
 	auth := auth.AuthRepositoryImplementation{
 		UserRepo:       user,
@@ -49,15 +53,23 @@ func Start() *HandlerContainer {
 
 	// ---- USE CASES ----
 	noteCreate := &usecases.CreateNoteImplementation{
-		Note: &notes,
+		Note: postgres,
 	}
 
 	noteUpdate := &usecases.UpdateNoteImplementation{
-		Note: &notes,
+		Note: postgres,
+	}
+
+	noteGet := &usecases.GetNoteImplementation{
+		Note: postgres,
 	}
 
 	noteGetAll := &usecases.GetAllNotesImplemetation{
-		Note: &notes,
+		Note: postgres,
+	}
+
+	noteDelete := &usecases.DeleNoteImplementation{
+		Note: postgres,
 	}
 
 	signUp := &usecases.SingUpImplementation{
@@ -97,6 +109,18 @@ func Start() *HandlerContainer {
 	handlersApp.NoteGetAll = middlewares.NewAuthMiddleware(
 		&handlers.NoteGetAll{
 			Note: noteGetAll,
+		}, &auth,
+	)
+
+	handlersApp.NoteGet = middlewares.NewAuthMiddleware(
+		&handlers.NoteGet{
+			Note: noteGet,
+		}, &auth,
+	)
+
+	handlersApp.NoteDelete = middlewares.NewAuthMiddleware(
+		&handlers.NoteDelete{
+			Note: noteDelete,
 		}, &auth,
 	)
 
