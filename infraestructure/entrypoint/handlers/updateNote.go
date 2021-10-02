@@ -35,7 +35,6 @@ func (h *NoteUpdate) Handle(c *gin.Context) {
 
 	err := h.Note.Exec(ctx, &note)
 	if err != nil {
-		// fmt.Println("Este es mi segundo error", err)
 		c.JSON(http.StatusBadRequest, new(interface{}))
 		return
 	}

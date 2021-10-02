@@ -96,7 +96,8 @@ func Start() *HandlerContainer {
 	// Notes handlers
 	handlersApp.NoteCreate = middlewares.NewAuthMiddleware(
 		&handlers.NoteCreate{
-			Note: noteCreate,
+			Note:   noteCreate,
+			Logger: logger,
 		}, &auth,
 	)
 
@@ -120,7 +121,8 @@ func Start() *HandlerContainer {
 
 	handlersApp.NoteDelete = middlewares.NewAuthMiddleware(
 		&handlers.NoteDelete{
-			Note: noteDelete,
+			Note:   noteDelete,
+			Logger: logger,
 		}, &auth,
 	)
 
