@@ -6,7 +6,7 @@
 ### Configs:
 **config.yml**: Contains env variables
 **init.go**: Initialize variables from config file
-```
+```txt
 config
 ├── config.yml
 └── init.go
@@ -18,14 +18,26 @@ config
 **Health:**
 GET /api/v1/notes/ping
 
-```
+```txt
   pong
 ```
 
 **Create note:**
 POST /api/v1/notes
+
+***request:***
+```json
+  {
+      "name": "{note_name}",
+      "description": "{note_description}"
+  }
 ```
-  null
+***response:***
+```json
+  {
+      "code": 201,
+      "message": "Resource created successfully"
+  }
 ```
 
 **Update error:**
@@ -38,23 +50,57 @@ PUT /api/v1/notes/:id
   }
 ```
 ***response:***
-```
-  null
+```json
+  {
+      "code": 200,
+      "message": "Resource updated successfully"
+  }
 ```
 
 **Get All:**
 GET /api/v1/notes/all
 
 ***response:***
-```
-  null
+```json
+  {
+      "code": 200,
+      "message": [
+          {
+              "ID": "2",
+              "Name": "Test name 2",
+              "Description": "Nota de test 2",
+              "Deleted": false,
+              "DateCreated": "2021-10-02T22:56:15.105786Z",
+              "DateUpdated": "0001-01-01T00:00:00Z",
+              "DateDeleted": "0001-01-01T00:00:00Z"
+          },
+          {
+              "ID": "3",
+              "Name": "Note test 4",
+              "Description": "This is the default description",
+              "Deleted": false,
+              "DateCreated": "2021-10-02T18:06:22.263068Z",
+              "DateUpdated": "0001-01-01T00:00:00Z",
+              "DateDeleted": "0001-01-01T00:00:00Z"
+          },
+          {
+              "ID": "1",
+              "Name": "Test name 1",
+              "Description": "Updated note",
+              "Deleted": false,
+              "DateCreated": "2021-10-02T22:56:15.105786Z",
+              "DateUpdated": "2021-10-02T18:07:14.568577Z",
+              "DateDeleted": "0001-01-01T00:00:00Z"
+          }
+      ]
+  }
 ```
 
 **Get One Note:**
 GET /api/v1/notes/:id
 
 ***response:***
-```
+```json
 {
     "ID": "1",
     "Name": "Test name 1",
@@ -70,8 +116,11 @@ GET /api/v1/notes/:id
 DELETE /api/v1/notes/:id
 
 ***response:***
-```
-  null
+```json
+  {
+      "code": 200,
+      "message": "Resource deleted successfully"
+  }
 ```
 
 **SignUp:**
@@ -85,6 +134,26 @@ POST /api/v1/notes/signup
   }
 ```
 ***response:***
+```json
+  {
+      "code": 201,
+      "message": "User registered successfully"
+  }
 ```
-  null
+
+**SignIn:**
+POST /api/v1/notes/signin
+
+***request:***
+```json
+  {
+      "username": "{user_name}",
+      "password": "{password}"
+  }
+```
+***response:***
+```json
+  {
+      "token": "{token}"
+  }
 ```
