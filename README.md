@@ -11,8 +11,37 @@ config
 ├── config.yml
 └── init.go
 ```
+### Run locally
+**Install make to run commands**
+```sh
+# for MacOS
+brew install make
+```
 
+Run app locally using the next commands:
+**Build postgres container**
+```
+make build-pg
+```
+**Run postgres container**
+```
+make run-postgres
+```
+If you want use mongo service:
+```
+make run-mongo
+```
+### Run app
+```
+make run
+```
 
+### Run with Docker
+**Note: You must comment DB implementations to run**
+```
+docker build --pull --rm -f "Dockerfile" -t gonotesproject:latest "."
+docker run -it -p 8080:8080 gonotesproject:latest
+```
 ### Enpoints
 
 **Health:**

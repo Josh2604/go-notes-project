@@ -33,14 +33,23 @@ func Start() *HandlerContainer {
 
 	// ---- REPOSITORIES ----
 	user := &mongo.UserRepositoryImplementation{
-		Db: dbConnection.Collection(viper.GetString("mongo.user_collection")),
+		DB: dbConnection.Collection(viper.GetString("mongo.user_collection")),
 	}
 
 	postgres := &postgres.PostgresImplementation{
 		DB: pgConnection,
 	}
-
-	// notes := mongo.NotesRepositoryImplementation{
+	/**
+	MongoDB implementation, just substitute in usescases ej.
+		noteCreate := &usecases.CreateNoteImplementation{
+			Note: postgres,
+		}
+		to
+		noteCreate := &usecases.CreateNoteImplementation{
+			Note: notesMongoImpl,
+		}
+	*/
+	// notesMongoImpl := mongo.NotesRepositoryImplementation{
 	// 	Db: dbConnection.Collection(viper.GetString("mongo.notes_collection")),
 	// }
 
@@ -48,7 +57,7 @@ func Start() *HandlerContainer {
 		UserRepo:       user,
 		HashSalt:       viper.GetString("auth.hash_salt"),
 		SigningKey:     []byte(viper.GetString("auth.signing_key")),
-		ExpireDurarion: viper.GetDuration("auth.token_ttl"),
+		ExpireDuration: viper.GetDuration("auth.token_ttl"),
 	}
 
 	// ---- USE CASES ----
@@ -64,7 +73,7 @@ func Start() *HandlerContainer {
 		Note: postgres,
 	}
 
-	noteGetAll := &usecases.GetAllNotesImplemetation{
+	noteGetAll := &usecases.GetAllNotesImplementation{
 		Note: postgres,
 	}
 

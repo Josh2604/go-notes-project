@@ -11,11 +11,11 @@ type NoteGetAll interface {
 	Exec(ctx context.Context) (*[]entities.Note, error)
 }
 
-type GetAllNotesImplemetation struct {
+type GetAllNotesImplementation struct {
 	Note repositories.NoteRepository
 }
 
-func (gn *GetAllNotesImplemetation) Exec(ctx context.Context) (*[]entities.Note, error) {
+func (gn *GetAllNotesImplementation) Exec(ctx context.Context) (*[]entities.Note, error) {
 	allNotes, err := gn.Note.GetAll(ctx)
 	if err != nil {
 		return nil, err

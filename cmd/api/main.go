@@ -5,15 +5,17 @@ import (
 
 	"github.com/Josh2604/go-notes-project/config"
 	"github.com/Josh2604/go-notes-project/server"
-	"github.com/spf13/viper"
 )
 
 func main() {
+	/**
+	Loads config file from config/config.yml
+	*/
 	if err := config.Init(); err != nil {
 		log.Fatalf("%s", err.Error())
 	}
 
-	if err := server.Run(viper.GetString("port")); err != nil {
+	if err := server.Run("8080"); err != nil {
 		log.Fatalf("%s", err.Error())
 	}
 }

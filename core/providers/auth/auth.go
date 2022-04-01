@@ -21,7 +21,7 @@ type AuthRepositoryImplementation struct {
 	UserRepo       mongo.UserRepository
 	HashSalt       string
 	SigningKey     []byte
-	ExpireDurarion time.Duration
+	ExpireDuration time.Duration
 }
 
 func (a *AuthRepositoryImplementation) SingUp(ctx context.Context, username, password string) error {
@@ -50,7 +50,7 @@ func (a *AuthRepositoryImplementation) SingIn(ctx context.Context, username, pas
 
 	claims := AuthClaims{
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: jwt.At(time.Now().Add(a.ExpireDurarion)),
+			ExpiresAt: jwt.At(time.Now().Add(a.ExpireDuration)),
 		},
 		User: user,
 	}

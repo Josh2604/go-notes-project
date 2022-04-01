@@ -22,12 +22,12 @@ type UserModel struct {
 }
 
 type UserRepositoryImplementation struct {
-	Db *mongo.Collection
+	DB *mongo.Collection
 }
 
 func (r UserRepositoryImplementation) CreateUser(ctx context.Context, user *entities.User) error {
 	model := toMongoUser(user)
-	res, err := r.Db.InsertOne(ctx, model)
+	res, err := r.DB.InsertOne(ctx, model)
 	if err != nil {
 		return err
 	}
@@ -38,7 +38,7 @@ func (r UserRepositoryImplementation) CreateUser(ctx context.Context, user *enti
 
 func (r UserRepositoryImplementation) GetUser(ctx context.Context, username, password string) (*entities.User, error) {
 	user := new(UserModel)
-	err := r.Db.FindOne(ctx, bson.M{
+	err := r.DB.FindOne(ctx, bson.M{
 		"username": username,
 		"password": password,
 	}).Decode(user)
